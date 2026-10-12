@@ -134,7 +134,7 @@ function showView(viewName) {
         view.classList.remove("active");
     });
 
-    const target = $(viewName + "-view");
+    const target = document.getElementById(`${viewName}-view`);
 
     if (target) {
         target.classList.add("active");
