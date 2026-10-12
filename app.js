@@ -1233,3 +1233,114 @@ scanButton.addEventListener("click", async () => {
 
 
 initializeApp();
+
+// LocalCart Product Photo Scanner
+
+const photoInput = document.getElementById("productImage");
+const scanButton = document.getElementById("scanProducts");
+const scanStatus = document.getElementById("scanStatus");
+const scannedProducts = document.getElementById("scannedProducts");
+const addButton = document.getElementById("addScannedProducts");
+
+// Scan a photo and extract text
+scanButton.addEventListener("click", async () => {
+    const file = photoInput.files[0];
+
+    if (!file) {
+        scanStatus.textContent = "Please take or select a photo first.";
+        return;
+    }
+
+    if (!window.Tesseract) {
+        scanStatus.textContent =
+            "Scanner is loading or unavailable. Check your internet connection.";
+        return;
+    }
+
+    scanButton.disabled = true;
+    scanStatus.textContent = "Reading the photo...";
+
+    try {
+        const result = await Tesseract.recognize(file, "eng", {
+            logger: info => {
+                if (info.status === "recognizing text") {
+                    scanStatus.textContent =
+                        "Scanning: " + Math.round(info.progress * 100) + "%";
+                }
+            }
+        });
+
+        scannedProducts.value = result.data.text
+            .split("\n")
+            .map(line => line.trim())
+            .filter(Boolean)
+            .join("\n");
+
+        scanStatus.textContent =
+            "Scan complete. Check names and prices before adding.";
+
+    } catch (error) {
+        scanStatus.textContent =
+            "Scan failed. Please try a clearer photo.";
+    } finally {
+        scanButton.disabled = false;
+    }
+});
+
+// Add scanned products using LocalCart's existing product system
+addButton.addEventListener("click", () => {
+    const lines = scannedProducts.value
+        .split("\n")
+        .map(line => line.trim())
+        .filter(Boolean);
+
+    if (!lines.length) {
+        scanStatus.textContent = "No products found.";
+        return;
+    }
+
+    const confirmAdd = confirm(
+        "Add " + lines.length + " scanned lines? Please check prices first."
+    );
+
+    if (!confirmAdd) return;
+
+    // Convert each line to: Product Name, Price, Unit
+    const formatted = lines.map(line => {
+        const parts = line.split(/[,;\t]+/).map(x => x.trim());
+
+        if (parts.length < 2) return null;
+
+        const priceText = parts[1].replace(/[₹,\s]/g, "");
+        const price = Number(priceText);
+
+        if (!parts[0] || !Number.isFinite(price) || price < 0) {
+            return null;
+        }
+
+        const unit = parts.slice(2).join(" ") || "1 unit";
+
+        return {
+            name: parts[0],
+            price: price,
+            unit: unit
+        };
+    }).filter(Boolean);
+
+    if (!formatted.length) {
+        scanStatus.textContent =
+            "Could not identify product names and prices. Edit the list into Name, Price, Unit format.";
+        return;
+    }
+
+    /*
+      Your current LocalCart app.js must connect these products
+      to its existing shop/product saving system.
+      Do not pretend they are saved until that connection is made.
+    */
+
+    scanStatus.textContent =
+        formatted.length + " products recognized. The final save connection to your existing LocalCart system is still needed.";
+
+    console.log("Scanned products:", formatted);
+});
