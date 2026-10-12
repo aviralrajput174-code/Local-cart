@@ -873,3 +873,50 @@ textarea {
         font-size: 11px;
     }
 }
+.scanner-box {
+    background: #ffffff;
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #dce8df;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.scanner-box h3 {
+    color: #16834a;
+    margin-top: 0;
+}
+
+.scanner-box input,
+.scanner-box textarea {
+    display: block;
+    width: 100%;
+    margin: 12px 0;
+    padding: 12px;
+    box-sizing: border-box;
+    border: 1px solid #ccd8cf;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.scanner-box button {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 9px;
+    background: #16834a;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.scanner-box button:disabled {
+    opacity: 0.6;
+}
+
+#scanStatus {
+    font-size: 14px;
+    color: #555;
+}
