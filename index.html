@@ -231,7 +231,26 @@
                     Sugar, 45, 1 kg<br>
                     Milk, 30, 500 ml
                 </div>
+<div class="scan-box">
+    <h3>📦 Bulk Product Scanner</h3>
+    <p>Scan your handwritten product list or upload a photo.</p>
 
+    <label for="productImage">📷 Scan / Upload Product List</label>
+    <input
+        type="file"
+        id="productImage"
+        accept="image/*"
+        capture="environment"
+    >
+
+    <button type="button" id="scanProducts">
+        Scan & Generate Products
+    </button>
+
+    <p id="scanStatus">
+        Select a photo to get started.
+    </p>
+</div>
                 <form id="bulk-product-form">
 
                     <div class="form-group">
