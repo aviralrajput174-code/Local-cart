@@ -1181,5 +1181,55 @@ function initializeApp() {
 
     updateCartCount();
 }
+const imageInput = document.getElementById("productImage");
+const scanButton = document.getElementById("scanProducts");
+const scanStatus = document.getElementById("scanStatus");
+const productTextarea = document.getElementById("bulk-products");
+
+scanButton.addEventListener("click", async () => {
+    const file = imageInput.files[0];
+
+    if (!file) {
+        scanStatus.textContent = "Please select or capture a photo first.";
+        return;
+    }
+
+    if (!window.Tesseract) {
+        scanStatus.textContent = "OCR library could not load. Check your internet connection.";
+        return;
+    }
+
+    scanButton.disabled = true;
+    scanStatus.textContent = "Reading the product list... Please wait.";
+
+    try {
+        const result = await Tesseract.recognize(file, "eng", {
+            logger: message => {
+                if (message.status === "recognizing text") {
+                    scanStatus.textContent =
+                        `Scanning: ${Math.round(message.progress * 100)}%`;
+                }
+            }
+        });
+
+        const text = result.data.text.trim();
+
+        if (!text) {
+            scanStatus.textContent =
+                "No text detected. Try a clearer photo.";
+            return;
+        }
+
+        productTextarea.value = text;
+        scanStatus.textContent =
+            "Scan complete! Check product names and prices, then tap Generate Product Cards.";
+    } catch (error) {
+        scanStatus.textContent =
+            "Scanning failed. Try another clear photo.";
+    } finally {
+        scanButton.disabled = false;
+    }
+});
+
 
 initializeApp();
