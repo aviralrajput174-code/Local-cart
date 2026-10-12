@@ -139,7 +139,7 @@ function showView(viewName) {
     if (target) {
         target.classList.add("active");
     }
-
+}
     document.querySelectorAll("[data-view]").forEach(button => {
         button.classList.toggle(
             "active",
