@@ -256,6 +256,35 @@
                     <div class="form-group">
                         <label for="bulk-products">
                             Paste Your Product List
+                        <!-- Bulk Product Photo Scanner -->
+<div class="scanner-box">
+    <h3>📷 Scan Product List</h3>
+    <p>Take a photo of your handwritten product list.</p>
+
+    <input
+        type="file"
+        id="productImage"
+        accept="image/*"
+        capture="environment"
+    >
+
+    <button type="button" id="scanProducts">
+        Scan Product List
+    </button>
+
+    <p id="scanStatus">Choose a photo to start.</p>
+
+    <label for="scannedProducts">Review Products</label>
+    <textarea
+        id="scannedProducts"
+        rows="8"
+        placeholder="Product Name, Price, Unit"
+    ></textarea>
+
+    <button type="button" id="addScannedProducts">
+        Confirm & Add All Products
+    </button>
+</div>
                         </label>
 
                         <textarea
