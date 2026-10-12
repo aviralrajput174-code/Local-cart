@@ -133,8 +133,7 @@ function showView(viewName) {
     document.querySelectorAll(".view").forEach(view => {
         view.classList.remove("active");
     });
-
-    const target = document.getElementById(`${viewName}-view`);
+   const target = document.getElementById(`${viewName}-view`);
 
     if (target) {
         target.classList.add("active");
